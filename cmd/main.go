@@ -2,59 +2,41 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 
 	config "github.com/femosc2/ia-discord-bot-2/config"
+	"github.com/femosc2/ia-discord-bot-2/messages"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-var (
-	commandPrefix string
-	botID         string
-)
-
 func main() {
-	discord, err := discordgo.New("Bot " + config.Token)
-	errCheck("error creating discord session", err)
-	user, err := discord.User("@me")
-	errCheck("error retrieving account", err)
 
-	botID = user.ID
-	discord.AddHandler(commandHandler)
-	discord.AddHandler(func(discord *discordgo.Session, ready *discordgo.Ready) {
-		err = discord.UpdateStatus(0, "IAs egna slavrobot!")
-		if err != nil {
-			fmt.Println("Error attempting to set my status")
-		}
-		servers := discord.State.Guilds
-		fmt.Printf("IA Botten has started on %d servers", len(servers))
-	})
-
-	err = discord.Open()
-	errCheck("Error opening connection to Discord", err)
-	defer discord.Close()
-
-	commandPrefix = "!"
-
-	<-make(chan struct{})
-
-}
-
-func errCheck(msg string, err error) {
+	// Create a new Discord session using the provided bot token.
+	dg, err := discordgo.New("Bot " + config.Token)
 	if err != nil {
-		fmt.Printf("%s: %+v", msg, err)
-		panic(err)
-	}
-}
-
-func commandHandler(discord *discordgo.Session, message *discordgo.MessageCreate) {
-	user := message.Author
-	if user.ID == botID || user.Bot {
-		//Do nothing because the bot is talking
+		fmt.Println("error creating Discord session,", err)
 		return
 	}
 
-	// content := message.Content
+	// Register the messageCreate func as a callback for MessageCreate events.
+	dg.AddHandler(messages.MessageCreate)
 
-	fmt.Printf("Message: %+v || From: %s\n", message.Message, message.Author)
+	// Open a websocket connection to Discord and begin listening.
+	err = dg.Open()
+	if err != nil {
+		fmt.Println("error opening connection,", err)
+		return
+	}
+
+	// Wait here until CTRL-C or other term signal is received.
+	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	<-sc
+
+	// Cleanly close down the Discord session.
+	dg.Close()
 }
