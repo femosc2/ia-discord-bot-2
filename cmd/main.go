@@ -7,7 +7,7 @@ import (
 	"syscall"
 
 	config "github.com/femosc2/ia-discord-bot-2/config"
-	"github.com/femosc2/ia-discord-bot-2/messages"
+	"github.com/femosc2/ia-discord-bot-2/features/messages"
 
 	"github.com/bwmarrin/discordgo"
 )
