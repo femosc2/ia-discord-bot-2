@@ -6,6 +6,10 @@ import (
 	"os/signal"
 	"syscall"
 
+	extensions "github.com/femosc2/ia-discord-bot-2/Extensions"
+	entirestore "github.com/femosc2/ia-discord-bot-2/Store"
+	viewmodels "github.com/femosc2/ia-discord-bot-2/viewmodels"
+
 	config "github.com/femosc2/ia-discord-bot-2/config"
 	"github.com/femosc2/ia-discord-bot-2/features/messages"
 
@@ -13,6 +17,13 @@ import (
 )
 
 func main() {
+
+	fmt.Println("Adding items to store...")
+	store := viewmodels.StoreViewModel{
+		Schedules: extensions.StartupScrape(),
+	}
+	entirestore.SetStore(store)
+	fmt.Println("Items added to store!")
 
 	// Create a new Discord session using the provided bot token.
 	dg, err := discordgo.New("Bot " + config.Token)
