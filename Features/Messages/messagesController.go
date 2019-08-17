@@ -3,6 +3,8 @@ package messages
 import (
 	"strings"
 
+	schedule "github.com/femosc2/ia-discord-bot-2/Features/Schedule"
+
 	"github.com/bwmarrin/discordgo"
 	quotes "github.com/femosc2/ia-discord-bot-2/Features/Quotes"
 )
@@ -23,5 +25,17 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else if strings.HasPrefix(m.Content, "!addquote ") {
 		quote := strings.Replace(m.Content, "!addquote ", "", 1)
 		s.ChannelMessageSend(m.ChannelID, quotes.PostQuote(quote, "Felix", m.Author.Username))
+	} else if m.Content == "!exams17" {
+		for _, element := range schedule.GetExams("http://schema.mah.se/setup/jsp/Schema.jsp?startDatum=idag&intervallTyp=m&intervallAntal=6&sprak=SV&sokMedAND=true&forklaringar=true&resurser=p.TGIAA17h") {
+			s.ChannelMessageSend(m.ChannelID, element)
+		}
+	} else if m.Content == "!exams18" {
+		for _, element := range schedule.GetExams("http://schema.mah.se/setup/jsp/Schema.jsp?startDatum=idag&intervallTyp=m&intervallAntal=6&sprak=SV&sokMedAND=true&forklaringar=true&resurser=p.TGIAA18h") {
+			s.ChannelMessageSend(m.ChannelID, element)
+		}
+	} else if m.Content == "!exams19" {
+		for _, element := range schedule.GetExams("http://schema.mah.se/setup/jsp/Schema.jsp?startDatum=idag&intervallTyp=m&intervallAntal=6&sprak=SV&sokMedAND=true&forklaringar=true&resurser=p.TGIAA19h") {
+			s.ChannelMessageSend(m.ChannelID, element)
+		}
 	}
 }
