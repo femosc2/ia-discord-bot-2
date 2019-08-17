@@ -1,6 +1,8 @@
 package messages
 
 import (
+	"strings"
+
 	"github.com/bwmarrin/discordgo"
 	quotes "github.com/femosc2/ia-discord-bot-2/Features/Quotes"
 )
@@ -12,14 +14,14 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	switch m.Content {
-	case "!contribute":
+	if m.Content == "!contribute" {
 		s.ChannelMessageSend(m.ChannelID, "https://github.com/femosc2/ia-discord-bot-2/")
-	case "!help":
+	} else if m.Content == "!help" {
 		s.ChannelMessageSend(m.ChannelID, "Detta kommandot kan man använda för att se alla tillgängliga kommando så fort jag lägger till ett par")
-	case "!quote":
+	} else if m.Content == "!quote" {
 		s.ChannelMessageSend(m.ChannelID, quotes.GetQuote())
-	case "!addquote":
-		s.ChannelMessageSend(m.ChannelID, quotes.PostQuote("Felix", "Wow ett quote", "Felix"))
+	} else if strings.HasPrefix(m.Content, "!addquote ") {
+		quote := strings.Replace(m.Content, "!addquote ", "", 1)
+		s.ChannelMessageSend(m.ChannelID, quotes.PostQuote(quote, "Felix", m.Author.Username))
 	}
 }
