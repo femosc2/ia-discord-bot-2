@@ -3,14 +3,14 @@ package messages
 import (
 	"strings"
 
-	schedule "github.com/femosc2/ia-discord-bot-2/Features/Schedule"
-
 	"github.com/bwmarrin/discordgo"
 	quotes "github.com/femosc2/ia-discord-bot-2/Features/Quotes"
+	entirestore "github.com/femosc2/ia-discord-bot-2/Store"
 )
 
 // MessageCreate The bot sends a message in the discord channel
 func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
+	store := entirestore.GetStore()
 
 	if m.Author.ID == s.State.User.ID {
 		return
@@ -24,18 +24,24 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, quotes.GetQuote())
 	} else if strings.HasPrefix(m.Content, "!addquote ") {
 		quote := strings.Replace(m.Content, "!addquote ", "", 1)
-		s.ChannelMessageSend(m.ChannelID, quotes.PostQuote(quote, "Felix", m.Author.Username))
+		s.ChannelMessageSend(m.ChannelID, quotes.PostQuote(quote, "", m.Author.Username))
 	} else if m.Content == "!exams17" {
-		for _, element := range schedule.GetExams("http://schema.mah.se/setup/jsp/Schema.jsp?startDatum=idag&intervallTyp=m&intervallAntal=6&sprak=SV&sokMedAND=true&forklaringar=true&resurser=p.TGIAA17h") {
+		for _, element := range store.Schedules.IA17 {
+			s.ChannelMessageSend(m.ChannelID, "________________________")
 			s.ChannelMessageSend(m.ChannelID, element)
 		}
+		s.ChannelMessageSend(m.ChannelID, "________________________")
 	} else if m.Content == "!exams18" {
-		for _, element := range schedule.GetExams("http://schema.mah.se/setup/jsp/Schema.jsp?startDatum=idag&intervallTyp=m&intervallAntal=6&sprak=SV&sokMedAND=true&forklaringar=true&resurser=p.TGIAA18h") {
+		for _, element := range store.Schedules.IA18 {
+			s.ChannelMessageSend(m.ChannelID, "________________________")
 			s.ChannelMessageSend(m.ChannelID, element)
 		}
+		s.ChannelMessageSend(m.ChannelID, "________________________")
 	} else if m.Content == "!exams19" {
-		for _, element := range schedule.GetExams("http://schema.mah.se/setup/jsp/Schema.jsp?startDatum=idag&intervallTyp=m&intervallAntal=6&sprak=SV&sokMedAND=true&forklaringar=true&resurser=p.TGIAA19h") {
+		for _, element := range store.Schedules.IA19 {
+			s.ChannelMessageSend(m.ChannelID, "________________________")
 			s.ChannelMessageSend(m.ChannelID, element)
 		}
+		s.ChannelMessageSend(m.ChannelID, "________________________")
 	}
 }

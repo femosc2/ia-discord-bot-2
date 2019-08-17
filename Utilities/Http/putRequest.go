@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// PutRequest Perform a PUT request
 func PutRequest(url string, data io.Reader) {
 	client := &http.Client{}
 	req, err := http.NewRequest(http.MethodPut, url, data)
