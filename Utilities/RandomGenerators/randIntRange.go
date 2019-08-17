@@ -1,4 +1,4 @@
-package utilities
+package randomgensutils
 
 import (
 	"math/rand"

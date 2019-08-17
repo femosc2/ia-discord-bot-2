@@ -19,5 +19,7 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "Detta kommandot kan man använda för att se alla tillgängliga kommando så fort jag lägger till ett par")
 	case "!quote":
 		s.ChannelMessageSend(m.ChannelID, quotes.GetQuote())
+	case "!addquote":
+		s.ChannelMessageSend(m.ChannelID, quotes.PostQuote("Felix", "Wow ett quote", "Felix"))
 	}
 }
