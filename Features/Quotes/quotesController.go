@@ -65,5 +65,5 @@ func PostQuote(Text string, Who string, Reporter string) string {
 	}
 	httputils.PutRequest(config.Firebase+"/Quotes/"+strconv.Itoa((len(quoteList)))+".json", bytes.NewBuffer(requestBody))
 
-	return "Done"
+	return "Citatet finns nu i databasen! Tack för ditt bidrag!"
 }
