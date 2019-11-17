@@ -18,8 +18,16 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if m.Content == "!contribute" {
 		s.ChannelMessageSend(m.ChannelID, "https://github.com/femosc2/ia-discord-bot-2/")
-	} else if m.Content == "!help" {
-		s.ChannelMessageSend(m.ChannelID, "Detta kommandot kan man använda för att se alla tillgängliga kommando så fort jag lägger till ett par")
+	} else if m.Content == "!iahelp" {
+		s.ChannelMessageSend(m.ChannelID,
+			`
+			_________________
+			!contribute - Länk till repot för den här botten.
+			!exams<17/18/19> - Se alla salstentor på ert schema - e.g !exams19
+			!quote - Få ett slumpmässigt quote från en IAare!
+			!addquote - Lägg till ett nytt quote! - e.g !addquote Felix nya quote
+			-Felix (meddelandet måste sluta med ett bindelsträck följt av vem som sa det.)
+			`)
 	} else if m.Content == "!quote" {
 		s.ChannelMessageSend(m.ChannelID, quotes.GetQuote())
 	} else if strings.HasPrefix(m.Content, "!addquote ") {
