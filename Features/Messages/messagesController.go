@@ -34,7 +34,7 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		rawQuote := strings.Replace(m.Content, "!addquote ", "", 1)
 		author := strings.SplitAfter(rawQuote, "-")
 		quote := strings.Trim(rawQuote, "-"+author[1])
-		s.ChannelMessageSend(m.ChannelID, quotes.PostQuote(quote, author[1], m.Author.Username))
+		s.ChannelMessageSend(m.ChannelID, quotes.PostQuote(quote, m.Author.Username, author[1]))
 	} else if m.Content == "!exams17" {
 		for _, element := range store.Schedules.IA17 {
 			s.ChannelMessageSend(m.ChannelID, "________________________")
