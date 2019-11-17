@@ -14,7 +14,7 @@ const ( //Config keys for discord
 ```
 
 ## Deployment
-The application is hosten with google cloud and managed by the author of the repo.
+The application is hosted with Google Cloud and managed by the author of the repo.
 
 ## Contribution
 Feel free to contribute whatever you want! Just open a pull request and I'll have a look!
