@@ -23,8 +23,10 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else if m.Content == "!quote" {
 		s.ChannelMessageSend(m.ChannelID, quotes.GetQuote())
 	} else if strings.HasPrefix(m.Content, "!addquote ") {
-		quote := strings.Replace(m.Content, "!addquote ", "", 1)
-		s.ChannelMessageSend(m.ChannelID, quotes.PostQuote(quote, "", m.Author.Username))
+		rawQuote := strings.Replace(m.Content, "!addquote ", "", 1)
+		author := strings.SplitAfter(rawQuote, "-")
+		quote := strings.Trim(rawQuote, "-"+author[1])
+		s.ChannelMessageSend(m.ChannelID, quotes.PostQuote(quote, author[1], m.Author.Username))
 	} else if m.Content == "!exams17" {
 		for _, element := range store.Schedules.IA17 {
 			s.ChannelMessageSend(m.ChannelID, "________________________")
